@@ -21,9 +21,20 @@ A ideia é que cada instância do sistema use apenas um dos métodos de pagament
 - Resolver esse problema usando Java puro e padrões de projeto, como o Factory, mas também está avaliando adotar o padrão de injeção de dependências implementado pelo Spring Framework.
 - Desenvolver uma prova de conceito (Proof of Concept – PoC) do uso do Spring e compará-la com uma implementação tradicional, usando Java e padrões de projeto. Assim, vocês terão que desenvolver duas versões do sistema
 
+
 ### Explicação sobre injeção de dependência
 
+#### O que é Injeção de Dependência? 
 
+Injeção de Dependência (ou DI) é um padrão de design que basicamente faz com que um objeto receba de fora os recursos (ou dependências) que ele precisa, em vez de ele mesmo criar tudo internamente. Isso deixa o código mais organizado e traz várias vantagens, como: 
+
+- Menor acoplamento entre as partes do sistema 
+
+- Código mais fácil de testar 
+
+- Melhor manutenção no futuro 
+
+Um exemplo bem conhecido de uso desse padrão é o Spring Framework, que é famoso justamente por oferecer um sistema super flexível e eficiente de injeção de dependência.
 
 ### Implementação em Java puro
 
@@ -178,7 +189,26 @@ public class Application implements CommandLineRunner {
 ```
 
 ### Comparação entre as abordagens
+>##### Extensibilidade e Manutenibilidade
+A versão com Spring Framework facilita a extensão e a manutenção, pois a injeção de dependência permite adicionar ou modificar funcionalidades sem alterar o código existente.
+
+>##### Concisão e Boilerplate
+A versão Java puro com Factory Pattern possui mais código boilerplate (termo utilizado para quando a seções de código que devem ser incluídas em muitos lugares com pouca ou nenhuma alteração), enquanto a versão com Spring é mais concisa devido à gestão automática de dependências.
+
+>##### Facilidade para Adicionar Novas Funcionalidades
+Com Spring, basta criar uma nova implementação da interface e anotá-la; com Factory, seria necessário alterar a lógica da fábrica.
+
+>##### Manutenção e Expansão
+O Spring torna a manutenção e expansão mais simples, já que o código é modular e as dependências são gerenciadas automaticamente.
+
+>##### Complexidade com o Tempo
+A versão com Factory tende a se complicar conforme novos métodos são adicionados, enquanto o Spring distribui a complexidade e preserva a organização do código.
+
+>##### Preservação da Manutenibilidade
+A abordagem com Spring preserva melhor a manutenibilidade, reduzindo o acoplamento e facilitando a substituição de componentes.
 
 
 ### Conclusão
+Após desenvolver e analisar as duas versões do sistema, concluimos que a versão usando o Spring é mais vantajosa, principalmente quando pensamos em projetos maiores ou que vão evoluir com o tempo. Isso porque facilita questões como manter e expandir o sistema, já que o Spring cuida automaticamente da injeção de dependências e evita aquele monte de código repetitivo, que é mais visível na versão utilizando o Java puro.
 
+Sendo assim, apesar da implementação com Factory funcionar bem em projetos mais simples, ela acaba ficando mais confusa e difícil de manter conforme o sistema cresce. No geral, achamos que usar o Spring traz mais organização, economia de tempo e evita problemas futuros.
