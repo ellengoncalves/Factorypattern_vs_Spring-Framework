@@ -1,30 +1,30 @@
 # Factorypattern_vs_SpringsFramework
 
+💳 Factory Pattern vs Spring Framework
 Sistema de Pagamento com Injeção de Dependência em Java e Spring
 Autores: Ariane Sanga, Ellen Gonçalves
 
-Introdução ao Problema
-Em um sistema de e-commerce, o pagamento é uma parte crítica. O desafio foi criar uma solução com três métodos de pagamento: Cartão de Crédito, PIX e PayPal. Cada versão do sistema utiliza apenas um método de pagamento, definido durante a construção, e não em tempo de execução.
+📝 Introdução ao Problema
+Em um sistema de e-commerce, o pagamento é uma parte crítica.
+O desafio foi criar uma solução com três métodos de pagamento: Cartão de Crédito, PIX e PayPal.
 
-O que é Injeção de Dependência?
-Injeção de Dependência (Dependency Injection - DI) é um padrão de design usado para reduzir o acoplamento entre classes e melhorar a testabilidade e a manutenção do código.
+Cada versão do sistema usa um único método de pagamento, definido na construção, e não em tempo de execução.
 
-Ao invés de uma classe instanciar diretamente suas dependências, elas são injetadas de fora, promovendo:
+❓ O que é Injeção de Dependência?
+Injeção de Dependência (Dependency Injection - DI) é um padrão que:
 
-Menor acoplamento;
+🔄 Reduz o acoplamento entre classes
 
-Maior flexibilidade;
+🔧 Aumenta a flexibilidade
 
-Testes mais fáceis;
+🧪 Facilita os testes
 
-Manutenção facilitada.
+🛠️ Torna a manutenção mais simples
 
-O Spring Framework é um dos exemplos mais conhecidos de uso desse padrão, oferecendo um sistema robusto e flexível de injeção de dependência.
+O Spring Framework é um dos frameworks mais usados para aplicar esse padrão de forma robusta.
 
-Implementação com Java Puro (com Factory)
-Na primeira versão, utilizamos Java puro, com o padrão Factory para escolher qual processador de pagamento será usado.
-
-Interface PaymentProcessor
+🔧 Implementação com Java Puro (Factory)
+Interface
 java
 Copiar
 Editar
@@ -39,8 +39,6 @@ Cartão de Crédito:
 java
 Copiar
 Editar
-package com.example.factory.service;
-
 public class CreditCardPaymentProcessor implements PaymentProcessor {
     @Override
     public void process(double amount) {
@@ -53,8 +51,6 @@ PIX:
 java
 Copiar
 Editar
-package com.example.factory.service;
-
 public class PixPaymentProcessor implements PaymentProcessor {
     @Override
     public void process(double amount) {
@@ -67,8 +63,6 @@ PayPal:
 java
 Copiar
 Editar
-package com.example.factory.service;
-
 public class PayPalPaymentProcessor implements PaymentProcessor {
     @Override
     public void process(double amount) {
@@ -76,32 +70,24 @@ public class PayPalPaymentProcessor implements PaymentProcessor {
         System.out.println("Payment value: $ " + amount);
     }
 }
-Classe PaymentProcessorFactory
+Factory
 java
 Copiar
 Editar
-package com.example.factory.service;
-
 public class PaymentProcessorFactory {
     public static PaymentProcessor getProcessor(String type) {
         switch (type.toLowerCase()) {
-            case "credit":
-                return new CreditCardPaymentProcessor();
-            case "pix":
-                return new PixPaymentProcessor();
-            case "paypal":
-                return new PayPalPaymentProcessor();
-            default:
-                throw new IllegalArgumentException("Invalid payment type: " + type);
+            case "credit": return new CreditCardPaymentProcessor();
+            case "pix": return new PixPaymentProcessor();
+            case "paypal": return new PayPalPaymentProcessor();
+            default: throw new IllegalArgumentException("Invalid payment type: " + type);
         }
     }
 }
-Classe PaymentService
+Serviço de Pagamento
 java
 Copiar
 Editar
-package com.example.factory.service;
-
 public class PaymentService {
     private final PaymentProcessor processor;
 
@@ -113,15 +99,11 @@ public class PaymentService {
         processor.process(amount);
     }
 }
-Implementação com Spring Framework
-Nessa versão, usamos o Spring, que se encarrega de instanciar e injetar o processador de pagamento correto, sem o uso de new.
-
-Interface PaymentProcessor
+🌱 Implementação com Spring Framework
+Interface
 java
 Copiar
 Editar
-package com.example.spring.service;
-
 public interface PaymentProcessor {
     void process(double amount);
 }
@@ -131,11 +113,6 @@ Cartão de Crédito:
 java
 Copiar
 Editar
-package com.example.spring.service;
-
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Component
 @Qualifier("credit")
 public class CreditCardPaymentProcessor implements PaymentProcessor {
@@ -150,11 +127,6 @@ PIX:
 java
 Copiar
 Editar
-package com.example.spring.service;
-
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Component
 @Qualifier("pix")
 public class PixPaymentProcessor implements PaymentProcessor {
@@ -169,11 +141,6 @@ PayPal:
 java
 Copiar
 Editar
-package com.example.spring.service;
-
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Component
 @Qualifier("paypal")
 public class PayPalPaymentProcessor implements PaymentProcessor {
@@ -183,40 +150,25 @@ public class PayPalPaymentProcessor implements PaymentProcessor {
         System.out.println("Payment value: $ " + amount);
     }
 }
-Classe PaymentService
+Serviço de Pagamento com Spring
 java
 Copiar
 Editar
-package com.example.spring.service;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 @Service
 public class PaymentService {
 
     @Autowired
-    @Qualifier("pix") // Pode ser alterado para "credit" ou "paypal"
+    @Qualifier("pix") // Pode ser "credit" ou "paypal"
     private PaymentProcessor paymentProcessor;
 
     public void pay(double amount) {
         paymentProcessor.process(amount);
     }
 }
-Classe Principal Application
+Classe Principal
 java
 Copiar
 Editar
-package com.example.spring;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.example.spring.service.PaymentService;
-
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -232,15 +184,17 @@ public class Application implements CommandLineRunner {
         paymentService.pay(350.00);
     }
 }
-Comparação entre as abordagens
+📊 Comparação entre as Abordagens
 Critério	Java Puro (Factory)	Spring (Injeção de Dependência)
-Acoplamento	Médio – depende da Factory	Baixo – injeta diretamente
-Flexibilidade	Média – exige alteração manual	Alta – basta mudar o @Qualifier
-Testabilidade	Média – exige simulação manual	Alta – fácil mock de dependências
-Complexidade Inicial	Baixa – código simples	Média – exige estrutura do Spring
-Escalabilidade	Limitada para projetos grandes	Alta – ideal para sistemas enterprise
-Conclusão
-A injeção de dependência é essencial para construir sistemas mais modulares, testáveis e fáceis de manter.
+🔗 Acoplamento	Médio (depende da Factory)	Baixo (injeção direta)
+🔄 Flexibilidade	Média (alteração manual)	Alta (muda o @Qualifier)
+🧪 Testabilidade	Média	Alta (mock fácil)
+🧠 Complexidade Inicial	Baixa	Média (requer estrutura Spring)
+📈 Escalabilidade	Limitada	Alta (ideal para sistemas grandes)
+✅ Conclusão
+A injeção de dependência torna o sistema mais modular, escalável e fácil de testar.
 
-A versão em Java puro é adequada para projetos menores e didáticos. No entanto, o uso do Spring se destaca em projetos maiores, oferecendo uma arquitetura mais robusta, flexível e escalável, com menos esforço manual para alternar comportamentos de execução.
+A versão com Java puro é ideal para sistemas simples e didáticos.
+
+Já a versão com Spring é melhor para projetos maiores, com mais flexibilidade e organização.
 
