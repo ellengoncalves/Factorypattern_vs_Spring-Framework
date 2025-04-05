@@ -6,8 +6,8 @@ Autores: Ariane Sanga, Ellen Gonçalves
 ### Introdução ao problema
 Desenvolvimento de um sistema de pagamentos para um e-commerce, onde ele precisa oferecer suporte a pagamentos por três métodos:
 - Cartão de crédito 
-- PIX; ou 
-- PayPal. 
+- PIX
+- PayPal.
 
 A ideia é que cada instância do sistema use apenas um dos métodos de pagamento, que deve ser definido no instante em que é gerado o build do projeto.
 
@@ -140,7 +140,6 @@ public class PixPaymentProcessor implements PaymentProcessor {
     }
 }
 ```
-##### Classe PaymentProcessor
 
 ```java
 @Component
